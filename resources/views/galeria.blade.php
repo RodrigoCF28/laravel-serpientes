@@ -1,34 +1,60 @@
 @extends('layouts.layout')
 
 @section('contenido')
+    <h2>Galería de Serpientes</h2>
 
-<h2>Galería de Serpientes</h2>
+    @php
+        $familias = [
+            'boidae' => [
+                'nombre' => 'Boidae',
+                'descripcion' => 'Familia de Boas.',
+                'imagen' => 'images/boa.jpg',
+                'especies' => [
+                    [
+                        'comun' => 'Boa constrictor',
+                        'cientifico' => 'Boa constrictor',
+                        'imagen' => 'images/boaconstrictor.jpg',
+                        'descripcion' => 'Una serpiente constrictora muy fuerte.',
+                    ],
+                    [
+                        'comun' => 'Boa imperator',
+                        'cientifico' => 'Boa imperator',
+                        'imagen' => 'images/boaimperator.jpg',
+                        'descripcion' => 'Una de las boas más conocidas y comunes en cautiverio.',
+                    ],
+                    [
+                        'comun' => 'Boas esmeralda',
+                        'cientifico' => 'Corallus batesii',
+                        'imagen' => 'images/boaesmeralda.jpg',
+                        'descripcion' => 'Boas arborícolas con colores vibrantes.',
+                    ],
+                ],
+            ],
+        ];
+    @endphp
 
-<<div class="galeria">
+    <p>Selecciona la familia para ver sus especies.</p>
 
-<x-tarjeta 
-titulo="Cobra"
-imagen="images/cobra.jpg"
-descripcion="Serpiente venenosa conocida por su capucha."
-/>
+    <div class="galeria">
+        @foreach($familias as $slug => $familia)
+            <x-familia-tarjeta
+                slug="{{ $slug }}"
+                titulo="{{ $familia['nombre'] }}"
+                imagen="{{ $familia['imagen'] }}"
+                descripcion="{{ $familia['descripcion'] }}"
+            />
 
-<x-tarjeta 
-titulo="Mamba Negra"
-imagen="images/mamba.jpg"
-descripcion="Una de las serpientes más rápidas y peligrosas del mundo."
-/>
-
-<x-tarjeta 
-titulo="Víbora de Cascabel"
-imagen="images/cascabel.jpg"
-descripcion="Reconocida por el sonido de su cascabel."
-/>
-
-<x-tarjeta 
-titulo="Boa Constrictor"
-imagen="images/boa.jpg"
-descripcion="Una serpiente constrictora muy fuerte."
-/>
-</div>
-
+            <div class="especies" data-family="{{ $slug }}" hidden>
+                <div class="galeria">
+                    @foreach($familia['especies'] as $especie)
+                        <x-tarjeta
+                            titulo="{{ $especie['comun'] }} (<em>{{ $especie['cientifico'] }}</em>)"
+                            imagen="{{ $especie['imagen'] }}"
+                            descripcion="{{ $especie['descripcion'] }}"
+                        />
+                    @endforeach
+                </div>
+            </div>
+        @endforeach
+    </div>
 @endsection
